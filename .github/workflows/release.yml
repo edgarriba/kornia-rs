@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -23,6 +27,3 @@ jobs:
           maturin-version: latest
           command: build
           args: --release
-          #- name: Setup tmate session
-          #if: ${{ failure() }}
-          # uses: mxschmitt/action-tmate@v3
