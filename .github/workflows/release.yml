@@ -11,6 +11,9 @@ env:
 jobs:
   linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [x86_64, i686]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
@@ -25,6 +28,8 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           maturin-version: latest
+          target: ${{ matrix.target }}
+          manylinux: auto
           command: build
           args: --release
 
@@ -43,6 +48,7 @@ jobs:
           override: true
       - uses: messense/maturin-action@v1
         with:
+          target: ${{ matrix.target }}
           maturin-version: latest
           command: build
           args: --release
@@ -65,6 +71,22 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           maturin-version: latest
+          target: ${{ matrix.target }}
           command: build
           args: --release
-       
+  linux-cross:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [aarch64, armv7, s390x, ppc64le, ppc64]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: auto
+          args: --release
