@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [x86_64, i686]
+        target: [x64, x86]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-          architecture: x64
+          architecture: ${{ matrix.target }}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -28,19 +28,20 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           maturin-version: latest
-          target: ${{ matrix.target }}
-          manylinux: auto
           command: build
           args: --release
 
   macos:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        target: [x64, x86]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-          architecture: x64
+          architecture: ${{ matrix.target }}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -48,7 +49,6 @@ jobs:
           override: true
       - uses: messense/maturin-action@v1
         with:
-          target: ${{ matrix.target }}
           maturin-version: latest
           command: build
           args: --release
@@ -71,7 +71,6 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           maturin-version: latest
-          target: ${{ matrix.target }}
           command: build
           args: --release
   linux-cross:
@@ -89,4 +88,4 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release
+          args: --release -out dist --no-sdist -m Cargo.toml
