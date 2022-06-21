@@ -11,15 +11,12 @@ env:
 jobs:
   linux:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: [x64, x86]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-          architecture: ${{ matrix.target }}
+          architecture: x64
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -33,15 +30,12 @@ jobs:
 
   macos:
     runs-on: macos-latest
-    strategy:
-      matrix:
-        target: [x64, x86]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-          architecture: ${{ matrix.target }}
+          architecture: x64
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -73,19 +67,3 @@ jobs:
           maturin-version: latest
           command: build
           args: --release
-  linux-cross:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: [aarch64, armv7, s390x, ppc64le, ppc64]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      - name: Build wheels
-        uses: messense/maturin-action@v1
-        with:
-          target: ${{ matrix.target }}
-          manylinux: auto
-          args: --release -out dist --no-sdist -m Cargo.toml
