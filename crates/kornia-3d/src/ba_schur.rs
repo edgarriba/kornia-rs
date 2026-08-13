@@ -3632,8 +3632,14 @@ mod tests {
     #[test]
     fn motion_prior_over_disjoint_cameras_survives_sparse_path() {
         let cam = PinholeCamera {
-            fx: 500.0, fy: 500.0, cx: 320.0, cy: 240.0,
-            k1: 0.0, k2: 0.0, p1: 0.0, p2: 0.0,
+            fx: 500.0,
+            fy: 500.0,
+            cx: 320.0,
+            cy: 240.0,
+            k1: 0.0,
+            k2: 0.0,
+            p1: 0.0,
+            p2: 0.0,
         };
         // Three cameras marching along +X.
         let poses: Vec<Pose3d> = (0..3)
@@ -3672,7 +3678,9 @@ mod tests {
         }
         // The prior spans 0,1,2 — cameras 0 and 2 share no observation whatsoever.
         let mps = [BaMotionPrior {
-            i0: 0, i1: 1, i2: 2,
+            i0: 0,
+            i1: 1,
+            i2: 2,
             alpha: 0.5,
             position_sigma: 0.1,
             orientation_sigma: 0.1,
@@ -3683,7 +3691,13 @@ mod tests {
             ..BaParams::default()
         };
         let r = bundle_adjust_schur_with_all_priors(
-            &poses, &points, &obs, &cam, &params, None, Some(&mps),
+            &poses,
+            &points,
+            &obs,
+            &cam,
+            &params,
+            None,
+            Some(&mps),
         );
         assert!(
             r.is_ok(),
